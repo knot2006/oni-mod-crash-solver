@@ -34,7 +34,7 @@ if args.json == None:
     elif sys.platform == "win32":
         # Windows
         print("Detected Windows")
-        args.json = "~\Documents\Klei\OxygenNotIncluded\mods\mods.json"
+        args.json = "~\\Documents\\Klei\\OxygenNotIncluded\\mods\\mods.json"
     else:
         print("Unknown OS, " + sys.platform)
         print("mod json required to operate. See help.")
