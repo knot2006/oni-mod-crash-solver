@@ -4,7 +4,8 @@ from pathlib import Path
 desc = "Oxygen Not Included Mod Crash Resolver"
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument("-m", "--mod-json", dest='json', help="ONI mod json to read from")
-parser.add_argument("-e", "--executable", dest='exe', help="ONI executable for automatic testing")
+# parser.add_argument("-e", "--executable", dest='exe', help="ONI executable for automatic testing")
+# Defunct.
 args = parser.parse_args()
 
 if args.json == None:
@@ -19,7 +20,6 @@ mod_json_path = Path(args.json)
 mods_perm_off: int = 0
 mods_test: list = []
 mods_okay: list = []
-mods_trouble: list = []
 data = dict()
 mod_id: str = str()
 mod_enabled: bool = bool()
@@ -30,9 +30,6 @@ for mod in data["mods"]:
     mod_id = mod["label"]["id"]
     mod_name = mod["label"]["title"]
     mod_enabled = mod["enabled"]
-    #print("Mod: " + mod_name)
-    #print("Enabled: " + ("NO", "Yes")[mod_enabled])
-    #print('')
     if not mod_enabled:
         mods_perm_off += 1
     else:
