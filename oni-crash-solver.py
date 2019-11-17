@@ -1,9 +1,23 @@
 #!/usr/bin/python3
 import json, argparse, sys, shutil
 from pathlib import Path
+
+def prompt(valid_responses, prompt_text):
+    while True:
+        print(prompt_text)
+        response = sys.stdin.readline()[0]
+        response = response.lower()
+        for p in valid_responses:
+            if p == response:
+                return response
+        
+        print("Bad response")
+
+
 desc = "Oxygen Not Included Mod Crash Resolver"
 parser = argparse.ArgumentParser(description=desc)
-parser.add_argument("-m", "--mod-json", dest='json', help="ONI mod json to read from")
+parser.add_argument("-m", "--mod-json", dest="json", help="ONI mod json to read from")
+parser.add_argument("-n", "--enable-mods", dest="enable_mods", action='store_true', help="enable all mods")
 # parser.add_argument("-e", "--executable", dest='exe', help="ONI executable for automatic testing")
 # Defunct.
 args = parser.parse_args()
@@ -23,6 +37,9 @@ mods_okay: list = []
 data = dict()
 mod_id: str = str()
 mod_enabled: bool = bool()
+prompted: bool = False
+enable_all: bool = args.enable_mods
+
 with open(args.json, "r") as json_file:
     data = json.load(json_file)
 
@@ -30,10 +47,18 @@ for mod in data["mods"]:
     mod_id = mod["label"]["id"]
     mod_name = mod["label"]["title"]
     mod_enabled = mod["enabled"]
-    if not mod_enabled:
+    if not mod_enabled and not enable_all and not prompted:
+        response = prompt(["y", "n"],"Some mods are disabled either by you or from a crash.\n\tEnable them? [Y]es/[N]o")
+        if response == "y":
+            enable_all = True
+        
+        prompted = True
+        
+    if not enable_all and not mod_enabled:
         mods_perm_off += 1
-    else:
-        mods_test.append([mod_id, mod_enabled, mod_name])
+        continue
+    
+    mods_test.append([mod_id, mod_enabled, mod_name])
     
 print("Mods Disabled: " + str(mods_perm_off))
 print("Mods Enabled: " + str(len(mods_test)))
@@ -78,14 +103,7 @@ while True:
             print("\t" + mods_test[0][2])
             sys.exit(0)
         
-        while True:
-            print("Wrote new mod list. Open and check if game crashes.\n\tCrashed? [Y]es/[N]o/[P]rint/[C]ommit/[R]efresh/[A]bort")
-            response = sys.stdin.readline()[0]
-            response = response.lower()
-            if response == "y" or response == "n" or response == "a" or response == "p" or response == "c" or response == "r":
-                break
-            else:
-                print("Bad response.")
+        response = prompt(["y", "n", "a", "p", "c", "r"], "Wrote new mod list. Open and check if game crashes.\n\tCrashed? [Y]es/[N]o/[P]rint/[C]ommit/[R]efresh/[A]bort")
 
         if response == "a":
             print("Aborting. Copying from backup file at `" + backup_loc + "`")
