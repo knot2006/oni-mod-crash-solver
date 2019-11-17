@@ -47,7 +47,7 @@ def refresh_mod_json():
     with open(args.json, "w", encoding="utf8") as outfile:
         json.dump(data, outfile, indent=2, ensure_ascii=False)
 
-def update_mod_json():
+def update_mod_json(soft=False):
     mod_prt: int = 0
     for i, mod in enumerate(data["mods"]):
         mod_id = mod["label"]["id"]
@@ -57,7 +57,7 @@ def update_mod_json():
             data["mods"][i]["enabled"] = mods_test[mod_prt][1]
             data["mods"][i]["crash_count"] = 0
             mod_prt += 1
-    refresh_mod_json()
+    if not soft: refresh_mod_json()
     return
 
 while True:
@@ -91,12 +91,13 @@ while True:
             print("Aborting. Copying from backup file at `" + backup_loc + "`")
             shutil.copyfile(backup_loc, args.json, follow_symlinks=False)
             sys.exit(0)
-        elif response == "y":
-            print("Flipping mods.")
-            for i, c in enumerate(mods_test):
-                mods_test[i][1] = not mods_test[i][1]
-            update_mod_json()
-        elif response == "n":
+        elif response == "y" or response == "n":
+            if response == "y":
+                print("Flipping mods.")
+                for i, c in enumerate(mods_test):
+                    mods_test[i][1] = not mods_test[i][1]
+                update_mod_json(soft=True)
+
             print("Recording current safe mods")
             mods_okay.extend(list(filter(lambda x: x[1] == True, mods_test)))
             mods_test = list(filter(lambda x: x[1] == False, mods_test))
