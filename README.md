@@ -22,4 +22,8 @@ Once a `mods.json` file is given, follow the instructions at prompt. If an excep
 
 `mods.json` is ONI's way to keep track of the state of mods.
 
-On Linux, this location is `~/.config/unity3d/Klei/Oxygen Not Included/mods/mods.json`
+On Windows, this location is `%USERPROFILE%\Documents\Klei\OxygenNotIncluded\mods\mods.json`
+
+OSX, `~/Library/Application Support/Klei/Oxygen Not Included/mods/mods.json`
+
+Linux, `~/.config/unity3d/Klei/Oxygen Not Included/mods/mods.json`
