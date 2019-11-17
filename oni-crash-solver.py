@@ -23,14 +23,29 @@ parser.add_argument("-n", "--enable-mods", dest="enable_mods", action='store_tru
 args = parser.parse_args()
 
 if args.json == None:
-    print("mod json required to operate. See help.")
-    sys.exit(1)
-elif not Path(args.json).is_file():
-    print("`" + args.json + "` not a valid file.")
+    if sys.platform == "linux" or platform == "linux2":
+        # linux
+        print("Detected Linux.")
+        args.json = "~/.config/unity3d/Klei/Oxygen Not Included/mods/mods.json"
+    elif sys.platform == "darwin":
+        # OS X
+        print("Detected OSX")
+        args.json = "~/Library/Application Support/Klei/Oxygen Not Included/mods/mods.json"
+    elif sys.platform == "win32":
+        # Windows
+        print("Detected Windows")
+        args.json = "~\Documents\Klei\OxygenNotIncluded\mods\mods.json"
+    else:
+        print("Unknown OS, " + sys.platform)
+        print("mod json required to operate. See help.")
+        sys.exit(1)
+
+mod_json_path = Path(args.json).expanduser()
+
+if not mod_json_path.is_file():
+    print("`" + str(mod_json_path) + "` not a valid file.")
     sys.exit(1)
 
-
-mod_json_path = Path(args.json)
 mods_perm_off: int = 0
 mods_test: list = []
 mods_okay: list = []
@@ -40,7 +55,7 @@ mod_enabled: bool = bool()
 prompted: bool = False
 enable_all: bool = args.enable_mods
 
-with open(args.json, "r") as json_file:
+with open(str(mod_json_path), "r") as json_file:
     data = json.load(json_file)
 
 for mod in data["mods"]:
@@ -66,10 +81,10 @@ print("This tool works by disabling half of your mods and asking if it crashed.\
 sys.stdin.readline()
 backup_loc = str(mod_json_path.parent) +  "/mods.json.bak"
 print("Saving backup at " + backup_loc)
-shutil.copyfile(args.json, backup_loc, follow_symlinks=False)
+shutil.copyfile(str(mod_json_path), backup_loc, follow_symlinks=False)
 
 def refresh_mod_json():
-    with open(args.json, "w", encoding="utf8") as outfile:
+    with open(str(mod_json_path), "w", encoding="utf8") as outfile:
         json.dump(data, outfile, indent=2, ensure_ascii=False)
 
 def update_mod_json(soft=False):
@@ -107,7 +122,7 @@ while True:
 
         if response == "a":
             print("Aborting. Copying from backup file at `" + backup_loc + "`")
-            shutil.copyfile(backup_loc, args.json, follow_symlinks=False)
+            shutil.copyfile(backup_loc, str(mod_json_path), follow_symlinks=False)
             sys.exit(0)
         elif response == "y" or response == "n":
             if response == "y":
