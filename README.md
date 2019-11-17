@@ -10,7 +10,7 @@ Run `./oni-crash-solver.py -h` or `python3 ./oni-crash-solver.py -h` to get help
 
 Once a `mods.json` file is given, follow the instructions at prompt. If an exception occurs, a backup file is present next to the `mods.json` file.
 
-**Print** will list out the mods by name that are confirmed OK followed by the list of mods currently being tested by if enabled and name.
+**Print** will list out the mods by name that are confirmed OK followed by the list of mods currently being tested by if enabled/disabled and name.
 
 **Refresh** will rewrite the JSON file, useful if ONI rewrote the file after crashing from unrelated means (system instability).
 
