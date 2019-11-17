@@ -43,18 +43,21 @@ backup_loc = str(mod_json_path.parent) +  "/mods.json.bak"
 print("Saving backup at " + backup_loc)
 shutil.copyfile(args.json, backup_loc, follow_symlinks=False)
 
+def refresh_mod_json():
+    with open(args.json, "w", encoding="utf8") as outfile:
+        json.dump(data, outfile, indent=2, ensure_ascii=False)
+
 def update_mod_json():
     mod_prt: int = 0
     for i, mod in enumerate(data["mods"]):
         mod_id = mod["label"]["id"]
-        if mod_prt + 1 == len(mods_test):
+        if mod_prt == len(mods_test):
             break
         if mod_id == mods_test[mod_prt][0]:
             data["mods"][i]["enabled"] = mods_test[mod_prt][1]
             data["mods"][i]["crash_count"] = 0
             mod_prt += 1
-    with open(args.json, "w", encoding="utf8") as outfile:
-        json.dump(data, outfile, indent=2, ensure_ascii=False)
+    refresh_mod_json()
     return
 
 while True:
@@ -76,10 +79,10 @@ while True:
             sys.exit(0)
         
         while True:
-            print("Wrote new mod list. Open and check if game crashes.\n\tCrashed? [Y]es/[N]o/[P]rint/[C]ommit/[A]bort")
+            print("Wrote new mod list. Open and check if game crashes.\n\tCrashed? [Y]es/[N]o/[P]rint/[C]ommit/[R]efresh/[A]bort")
             response = sys.stdin.readline()[0]
             response = response.lower()
-            if response == "y" or response == "n" or response == "a" or response == "p" or response == "c":
+            if response == "y" or response == "n" or response == "a" or response == "p" or response == "c" or response == "r":
                 break
             else:
                 print("Bad response.")
@@ -109,5 +112,8 @@ while True:
         elif response == "c":
             print("Changes committed.")
             sys.exit(0)
+        elif response == "r":
+            print("Refreshing file.")
+            refresh_mod_json()
             
             
