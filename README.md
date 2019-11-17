@@ -6,7 +6,7 @@ A simple Python script to do a binary test to pin-point what mod is causing Oxyg
 
 Clone this repository to somewhere on your system either by using `git clone $this_repository` or downloading the repository as a zip.
 
-Run `./oni-crash-solver.py -h` or `python3 ./oni-crash-solver.py -h` to get help information, but the only argument is `-m` to select the `mods.json`.
+Run `./oni-crash-solver.py -h` or `python3 ./oni-crash-solver.py -h` to get help information, but the only required argument is `-m` to select the `mods.json` to work on.
 
 Once a `mods.json` file is given, follow the instructions at prompt. If an exception occurs, a backup file is present next to the `mods.json` file.
 
