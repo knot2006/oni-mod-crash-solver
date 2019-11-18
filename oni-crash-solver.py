@@ -34,16 +34,18 @@ if args.json == None:
     elif sys.platform == "win32":
         # Windows
         print("Detected Windows")
-        args.json = "~\\Documents\\Klei\\OxygenNotIncluded\\mods\\mods.json"
+        args.json = "~/Documents/Klei/OxygenNotIncluded/mods/mods.json"
     else:
         print("Unknown OS, " + sys.platform)
-        print("mod json required to operate. See help.")
+        print("mod json required to operate. See help.\nPress Enter to exit.")
+        sys.stdin.readline()
         sys.exit(1)
 
 mod_json_path = Path(args.json).expanduser()
 
 if not mod_json_path.is_file():
-    print("`" + str(mod_json_path) + "` not a valid file.")
+    print("`" + str(mod_json_path) + "` not a valid file.\nPress Enter to exit.")
+    sys.stdin.readline()
     sys.exit(1)
 
 mods_perm_off: int = 0
@@ -114,15 +116,17 @@ while True:
     response: str = str()
     while True:
         if len(mods_test) == 1:
-            print("Trouble mod located.")
+            print("Trouble mod located.\nPress Enter to exit.")
             print("\t" + mods_test[0][2])
+            sys.stdin.readline()
             sys.exit(0)
         
         response = prompt(["y", "n", "a", "p", "c", "r"], "Wrote new mod list. Open and check if game crashes.\n\tCrashed? [Y]es/[N]o/[P]rint/[C]ommit/[R]efresh/[A]bort")
 
         if response == "a":
-            print("Aborting. Copying from backup file at `" + backup_loc + "`")
+            print("Aborting. Copying from backup file at `" + backup_loc + "`\nPress Enter to exit.")
             shutil.copyfile(backup_loc, str(mod_json_path), follow_symlinks=False)
+            sys.stdin.readline()
             sys.exit(0)
         elif response == "y" or response == "n":
             if response == "y":
@@ -144,7 +148,8 @@ while True:
             for mod in mods_test:
                 print("\t" + ("DISABLED", "Enabled ")[mod[1]] + ": " + mod[2])
         elif response == "c":
-            print("Changes committed.")
+            print("Changes committed.\nPress Enter to exit.")
+            sys.stdin.readline()
             sys.exit(0)
         elif response == "r":
             print("Refreshing file.")
