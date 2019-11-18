@@ -37,7 +37,7 @@ if args.json == None:
         args.json = "~/Documents/Klei/OxygenNotIncluded/mods/mods.json"
     else:
         print("Unknown OS, " + sys.platform)
-        print("mod json required to operate. See help.\nPress Enter to exit.")
+        print("mod json required to operate. See help using --help.\nPress Enter to exit.")
         sys.stdin.readline()
         sys.exit(1)
 
