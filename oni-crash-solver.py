@@ -23,7 +23,7 @@ parser.add_argument("-n", "--enable-mods", dest="enable_mods", action='store_tru
 args = parser.parse_args()
 
 if args.json == None:
-    if sys.platform == "linux" or platform == "linux2":
+    if sys.platform == "linux" or sys.platform == "linux2":
         # linux
         print("Detected Linux.")
         args.json = "~/.config/unity3d/Klei/Oxygen Not Included/mods/mods.json"
