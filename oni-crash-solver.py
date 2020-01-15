@@ -57,7 +57,7 @@ mod_enabled: bool = bool()
 prompted: bool = False
 enable_all: bool = args.enable_mods
 
-with open(str(mod_json_path), "r") as json_file:
+with open(str(mod_json_path), "r", encoding="utf8") as json_file:
     data = json.load(json_file)
 
 for mod in data["mods"]:
